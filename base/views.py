@@ -5,7 +5,7 @@ from tkinter.messagebox import RETRY
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .models import Room,Topic,Message
-from .forms import RoomForm
+from .forms import RoomForm,UserForm
 from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -167,3 +167,14 @@ def deleteMessage(request,pk):
         message.delete()
         return redirect('home')
     return render(request,"base/delete_room.html",{"obj":message})
+
+@login_required(login_url="login")
+def updateUser(request):
+    user = request.user
+    form = UserForm(instance=user)
+    if request.method == "POST":
+        form = UserForm(request.POST,instance=user)
+        form.save()
+        return redirect("user_profile",pk=user.id)
+    context = {"form":form}
+    return render(request,"base/update_user.html",context)
