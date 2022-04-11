@@ -1,9 +1,14 @@
+from email.policy import default
 from pyexpat import model
 from tkinter.tix import Tree
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+# from django.contrib.auth.models import User
 
 # Create your models here.
+class User(AbstractUser):
+    bio = models.TextField(null=True)
+    avatar = models.ImageField(null=True,default="avatar.svg")
 
 class Topic(models.Model):
     name = models.CharField(max_length=200)
@@ -38,3 +43,5 @@ class Message(models.Model):
 
     def __str__(self) -> str:
         return self.body[0:50]
+
+
