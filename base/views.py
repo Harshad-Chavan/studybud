@@ -13,6 +13,7 @@ from django.contrib.auth import authenticate, login , logout
 from django.contrib.auth.decorators import login_required
 # from django.contrib.auth.forms import UserCreationForm
 from .forms import CustomUserCreaionForm
+from .tasks import add
 
 
 # rooms = [ {"id":1,"name":"learn python"},
@@ -192,3 +193,8 @@ def activityPage(request):
     room_messages = Message.objects.all()
     context = {"room_messages":room_messages}
     return render(request,"base/activity.html",context)
+
+def celery_task_demo(request):
+    result = add.delay(4,4)
+    print(result)
+    return HttpResponse("Task has been started")
