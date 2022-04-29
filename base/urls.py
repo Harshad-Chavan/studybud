@@ -15,7 +15,8 @@ urlpatterns = [
     path('update_user',views.updateUser,name="update_user"),
     path('topics',views.topicsPage,name="topics"),
     path('activites',views.activityPage,name="activites"),
-    path('task',views.celery_task_demo,name="celery_task_demo")
+    path('task',views.celery_task_demo,name="celery_task_demo"),
+    path('forget_password',views.forget_password,name="forget_password")
     
     
 
