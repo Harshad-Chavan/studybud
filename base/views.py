@@ -13,9 +13,10 @@ from django.contrib.auth import authenticate, login , logout
 from django.contrib.auth.decorators import login_required
 # from django.contrib.auth.forms import UserCreationForm
 from .forms import CustomUserCreaionForm
-from .tasks import add
+from .tasks import add,send_forget_password_mail
 from django.core.mail import send_mail
 from django.conf import settings
+from .common_functions import validate_email
 
 
 # rooms = [ {"id":1,"name":"learn python"},
@@ -206,24 +207,23 @@ def forget_password(request):
     context = {}
     if request.method == "POST":
         email_id =  request.POST.get("email_id")
-        print(email_id)
-        try:
-            user = User.objects.get(email=email_id)
-        except:
-            messages.error(request,"User does not exist")
-        
-        if user is not None:
-            password = User.objects.make_random_password()
-            user.set_password(password)
-            user.save(update_fields=['password'])
-            send_mail(
-                subject='Studybud Password Reset',
-                message=f'This is you newly generated password {password}',
-                from_email=settings.EMAIL_HOST_USER,
-                recipient_list=[email_id])
-            context = {"message":"Please check your email for new password"}
+        if validate_email(email_id):
+            try:
+                user = User.objects.get(email=email_id)
+            except:
+                messages.error(request,"User does not exist")
+            
+            if user is not None:
+                password = User.objects.make_random_password()
+                send_forget_password_mail(email_id,password)
+                user.set_password(password)
+                user.save(update_fields=['password'])
+                
+                context = {"message":"Please check your email for new password"}
+            else:
+                messages.error(request,"Username or password does not exist")
         else:
-            messages.error(request,"Username or password does not exist")
+            messages.error(request,"Email id is invalid")
     
     return render(request,"base/forget_password.html",context)
     

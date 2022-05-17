@@ -147,6 +147,10 @@ MEDIA_URL = "/images/"
 # EmailProject/settings.py
 # This should be at the start of the file
 
+CELERY_BROKER_URL = 'amqp://localhost'
+
+
+
 
 # Previous settings ...
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
