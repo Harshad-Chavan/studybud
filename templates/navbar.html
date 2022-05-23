@@ -19,9 +19,12 @@
       <nav class="header__menu">
         
         {% if request.user.is_authenticated %}
+        
         <div class="header__user">
           <a href="{% url 'user_profile' request.user.id %}">
-            <div class="avatar avatar--medium active">
+            {% with logged_in="active" %}
+            <div class="avatar avatar--medium {{ logged_in }}">
+            {% endwith %}
               <img src="{{ request.user.avatar.url }}" />
             </div>
             <p>{{request.user.username}}<span>@{{request.user.username}}</span></p>
