@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 from pathlib import Path
 import os
-import djongo
 import environ
 
 env = environ.Env()
@@ -147,8 +146,15 @@ MEDIA_URL = "/images/"
 # EmailProject/settings.py
 # This should be at the start of the file
 
-CELERY_BROKER_URL = 'amqp://localhost'
+#CELERY_BROKER_URL = 'amqp://localhost'
 
+# CELERY STUFF for redis
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Africa/Nairobi'
 
 
 
